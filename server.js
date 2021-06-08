@@ -24,7 +24,7 @@ const io = socketIo(server, {
 });
 
 
-app.use(cors());
+app.use(cors('AllowAllHeaders'));
 // app.use(express.static(path.join(__dirname, '/client/public')))
 // console.log(path.join('/client/public'))
 
