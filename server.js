@@ -27,5 +27,4 @@ io.on('connection', socket => {
   })
 })
 
-
-server.listen(PORT, () => console.log(`server spinning on port ${PORT}`));
+http.listen(PORT, () => console.log(`server spinning on port ${PORT}`));
