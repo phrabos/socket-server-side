@@ -18,11 +18,11 @@ app.use(express.json());
 
 io.on('connection', socket => {
   console.log(`new connection ${socket.id}`)
-  socket.join('general')
-  socket.emit('new-client', 'front and back wired up')
-  socket.on('chat-input', (text) => {
-    console.log(text);
-    socket.broadcast.emit('chat-received', text)
+  // socket.join('general')
+
+  socket.on('transmit mouse', (data) => {
+    console.log(data);
+    socket.broadcast.emit('mouse response', data)
     // socket.broadcast.emit('received-message', message)
   })
 })
