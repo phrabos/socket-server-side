@@ -1,33 +1,20 @@
-const cors = require('cors');
 const express = require('express');
-const http = require('http');
 const app = express();
-app.use(cors());
-const server = http.createServer(app);
-const socketIo = require('socket.io');
-
 const PORT = process.env.PORT || 8000
-// const path = require('path');
+app.use(require('cors')({
+  origin: true,
+  credentials: true,
+}));
+const http = require('http').createServer(app)
 
 
-const io = socketIo(server, {
+const io = require('socket.io')(http, {
   cors: {
-    origins: ['https://heuristic-yalow-f5bcbc.netlify.app'],
-    // handlePreflightRequest: (req, res) => {
-    //   res.writeHead(200, {
-    //     "Access-Control-Allow-Origin": "https://heuristic-yalow-f5bcbc.netlify.app/",
-    //     "Access-Control-Allow-Methods": "GET, POST",
-    //     "Access-Control-Allow-Headers": "*",
-    //     "Access-Control-Allow-Credentials": true 
-    //   })
-    //   res.end();
-    // }
+    origin: true,
   }
-});
+})
 
-
-// app.use(express.static(path.join(__dirname, '/client/public')))
-// console.log(path.join('/client/public'))
+app.use(express.json());
 
 io.on('connection', socket => {
   console.log(`new connection ${socket.id}`)
