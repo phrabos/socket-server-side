@@ -1,4 +1,5 @@
 const express = require('express');
+const { setUncaughtExceptionCaptureCallback } = require('process');
 const app = express();
 const PORT = process.env.PORT || 8000
 app.use(require('cors')({
@@ -18,7 +19,6 @@ app.use(express.json());
 
 io.on('connection', socket => {
   console.log(`new connection ${socket.id}`)
-  console.log('->>>', socket)
 
   // socket.on('transmit mouse', (data) => {
   //   console.log(data);
@@ -28,7 +28,10 @@ io.on('connection', socket => {
 
   socket.on('ball dropped', data => {
     console.log(new Date(), data)
-    io.emit('emit drop', 'ball dropped from server')
+    io.emit('emit drop', data )
+  })
+  socket.on('ball move', data=> {
+    io.emit('moved ball', data)
   })
 })
 
