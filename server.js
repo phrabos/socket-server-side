@@ -31,8 +31,9 @@ io.on('connection', socket => {
     io.emit('emit drop', data )
   })
   socket.on('ball move', data=> {
-    io.emit('moved ball', data)
+    io.emit('ball move', data)
   })
+  
 })
 
 http.listen(PORT, () => console.log(`server spinning on port ${PORT}`));
