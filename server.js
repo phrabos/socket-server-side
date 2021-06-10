@@ -18,12 +18,17 @@ app.use(express.json());
 
 io.on('connection', socket => {
   console.log(`new connection ${socket.id}`)
-  // socket.join('general')
+  console.log('->>>', socket)
 
-  socket.on('transmit mouse', (data) => {
-    console.log(data);
-    socket.broadcast.emit('mouse response', data)
-    // socket.broadcast.emit('received-message', message)
+  // socket.on('transmit mouse', (data) => {
+  //   console.log(data);
+  //   socket.broadcast.emit('mouse response', data)
+
+  // })
+
+  socket.on('ball dropped', data => {
+    console.log(new Date(), data)
+    io.emit('emit drop', 'ball dropped from server')
   })
 })
 
