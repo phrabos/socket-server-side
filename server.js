@@ -17,44 +17,33 @@ const io = require('socket.io')(http, {
     credentials:true
   }
 })
-
+const namespace = io.of('/')
 app.use(express.json());
+
 const rooms = io.sockets.adapter.rooms
-let stateVariable={};
+let num=1;
 
 io.on('connection', socket => {
   console.log(`new connection ${socket.id}`)
 
-  for(let [key,value] of rooms){
-    stateVariable[key.toString()] = Array.from(value)
-  }
-  socket.emit('current state',stateVariable)
-
-  
-  socket.on('join room', (room) => {
-    socket.join(room)
-    const people = io.sockets.adapter.rooms.get(room);
-    for(let [key,value] of rooms){
-      stateVariable[key.toString()] = Array.from(value)
+  socket.on('collab', ({id})=>{
+    const room = 'room' + num;
+    socket.join(room);
+    const numOfParticipants = Array.from(namespace.adapter.rooms.get(room)).length
+     if(numOfParticipants >= 3){
+      num ++;
+      socket.join(room)
     }
-    console.log(stateVariable)
-  })
-
-  socket.on('collab', (socketId)=>{
-    socket.join(socketId)
-    console.log(stateVariable)
-   
-    
+    socket.emit('set room', room);
+    // console.log(io.of('/').in(room))
+    // console.log(io.sockets.adapter.rooms)
   })
 
   socket.on('ball dropped', (room, data) => {
+    console.log(room)
     io.to(room).emit('emit drop', data )
   }) 
-    
-  
-  socket.on('ball move', data=> {
-    io.emit('ball move', data)
-  })
+
 
   socket.on('leave', ()=>{
     console.log(socket)
