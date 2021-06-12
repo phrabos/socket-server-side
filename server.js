@@ -21,22 +21,23 @@ const namespace = io.of('/')
 app.use(express.json());
 
 const rooms = io.sockets.adapter.rooms
-let num=1;
+let num=10001;
 
 io.on('connection', socket => {
   console.log(`new connection ${socket.id}`)
 
   socket.on('collab', ({id})=>{
     const room = 'room' + num;
-    socket.join(room);
+    socket.join(room)
     const numOfParticipants = Array.from(namespace.adapter.rooms.get(room)).length
-     if(numOfParticipants >= 3){
-      num ++;
-      socket.join(room)
-    }
+    if(numOfParticipants >= 3)num++
+
     socket.emit('set room', room);
     // console.log(io.of('/').in(room))
-    // console.log(io.sockets.adapter.rooms)
+    console.log(namespace.adapter.rooms)
+  })
+  socket.on('start', () => {
+    num++
   })
 
   socket.on('ball dropped', (room, data) => {
